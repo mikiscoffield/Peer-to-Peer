@@ -1,3 +1,15 @@
+# Update: Telegram-only receipts
+
+For the current customer flow, deploy the latest **main** commit on your existing Render service (Manual Deploy → Deploy latest commit if auto-deploy is off). No new Supabase or admin setup is needed. Screenshots go directly to @ChristianAbe through Telegram; users attach them manually. Existing database/admin configuration can remain to access historical records, but new orders and screenshots are not saved by the website.
+
+Test 6 USDT → 1,093.20 ETB, confirm the large payment amount and telebirr details, then open the Telegram button and attach a harmless test photo. Test an arbitrary wallet address to verify that no address format/network matching blocks payment.
+
+For @cheapusdtbot: @BotFather → `/setmenubutton` → select @cheapusdtbot → button text **Buy USDT** → your Render HTTPS URL. Then configure the Main Mini App URL under `/mybots` if desired. Never send your bot token in chat.
+
+The previous instructions below describe the optional historical receipt storage and initial hosting setup. Automatic receipt notifications from the website no longer apply because website uploads are disabled.
+
+---
+
 # Publish Lykun as a Telegram Mini App
 
 This path uses Render Free + Supabase Free + Render's HTTPS `*.onrender.com` address. A custom domain is optional and usually costs money. Free quotas, pauses and provider policies can change: check the current dashboards and eligibility for your business before accepting customers. Do not choose paid plans or enable paid upgrades for this walkthrough.

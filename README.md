@@ -1,3 +1,15 @@
+# Current customer flow — Telegram only
+
+Customers choose a network and amount (minimum 6 USDT), optionally paste a wallet address, and see the ETB payment amount prominently after PAY NOW. No wallet format or network/address matching checks are performed. Send payment screenshots directly to **@ChristianAbe** using the Telegram button; attach the photo manually in that chat. The website never receives or stores new screenshots. `/api/orders` returns 410 and `/api/config` reports uploads disabled. The admin inbox remains available only for any historical receipts already stored.
+
+Run `npm start` and `npm test`. Deploy the latest `main` commit on Render. The Telegram-only flow needs no Supabase or admin credentials; existing Supabase settings may remain for historical inbox access. The rate is set using `USDT_ETB_RATE` (default 182.2).
+
+The app has custom local SVG illustrations. The telebirr mark is a vector approximation, not an official downloaded brand asset.
+
+---
+
+## Previous storage setup (historical reference)
+
 # Lykun · ETB to USDT
 Mobile-first Telegram mini app and a Node.js backend. No npm dependencies. Node 22+.
 
