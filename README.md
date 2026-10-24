@@ -1,41 +1,21 @@
-# Current customer flow — Telegram only
+# Lykun · Static Telegram Mini App
 
-Customers choose a network and amount (minimum 6 USDT), optionally paste a wallet address, and see the ETB payment amount prominently after PAY NOW. No wallet format or network/address matching checks are performed. Send payment screenshots directly to **@ChristianAbe** using the Telegram button; attach the photo manually in that chat. The website never receives or stores new screenshots. `/api/orders` returns 410 and `/api/config` reports uploads disabled. The admin inbox remains available only for any historical receipts already stored.
+A mobile-first ETB-to-USDT purchase interface. The production site is static: no running backend, database or secrets are required. Payment screenshots and order details are sent by the customer to @ChristianAbe on Telegram; payment review and USDT delivery remain manual.
 
-Run `npm start` and `npm test`. Deploy the latest `main` commit on Render. The Telegram-only flow needs no Supabase or admin credentials; existing Supabase settings may remain for historical inbox access. The rate is set using `USDT_ETB_RATE` (default 182.2).
-
-The app has custom local SVG illustrations. The telebirr mark is a vector approximation, not an official downloaded brand asset.
-
----
-
-## Previous storage setup (historical reference)
-
-# Lykun · ETB to USDT
-Mobile-first Telegram mini app and a Node.js backend. No npm dependencies. Node 22+.
-
-## Run
-```sh
-npm start
-npm test
+## Local development
+Node.js 22+; no npm dependencies.
 ```
-The server uses port 3000. For local screenshot testing, run `ADMIN_TOKEN=your-long-random-local-token npm start`, then visit `/admin` and enter that token. With no token, uploads are disabled and customers use the Telegram alternative. The token stays on the server and in admin-page memory, never browser storage.
+npm ci --ignore-scripts
+npm test
+npm start
+```
+`npm start` builds the static assets and serves a local preview on port 3000 (override with PORT). `npm run build` publishes only customer-facing files into `dist/`.
 
-## Launch configuration
-Set environment variables using `.env.example` as a reference. Node does not automatically load that file; inject variables using your hosting service or `node --env-file=.env server.js` after creating your own private `.env`.
+## Rate and networks
+Edit `public/config.json` and redeploy to change the rate (default 182.2 ETB/USDT) or network list. This file is public: never put keys or tokens in it. Render's old USDT_ETB_RATE and ENABLED_NETWORKS environment variables do not control the static site. The network list is provisional, not synchronized with Binance. Wallet/network matching is not validated. Minimum purchase is 6 USDT. Network fees are additional and buyer-paid. Delivery is usually under 15 minutes after payment confirmation, not guaranteed. Approved refunds have a 5% deduction; eligibility remains operator-managed.
 
-- `ADMIN_TOKEN`: long, random secret for the protected admin inbox. Generate with `openssl rand -hex 32`. Set securely in hosting settings.
-- `DATA_DIR`: private persistent storage. Orders and receipt images are saved here; never serve it publicly. Configure backups, disk limits, and a retention/deletion policy.
-- `USDT_ETB_RATE`: manually maintained listed rate (default 182.2). No live market feed is implied.
-- `ENABLED_NETWORKS`: comma-separated supported IDs. The included major-network list is provisional, not a live Binance integration. Confirm current Binance USDT availability and your ability to fulfill each network. Disable unsupported networks before accepting payment.
-- `TELEGRAM_BOT_TOKEN` and `TELEGRAM_ADMIN_CHAT_ID`: optional notifications with receipt attachment. Create a bot through BotFather and start it from the receiving admin account. A username alone cannot authorize bot delivery. Orders remain available in the inbox if notification delivery fails. Email delivery is not implemented.
+## Deployment
+See [DEPLOY.md](DEPLOY.md). `render.yaml` creates a new free Static Site named lykun-static. Static sites have no server process to sleep, but provider quotas, policies, outages and account restrictions still apply. Deploy only `dist/`, never the repository root.
 
-Deploy behind HTTPS with durable storage. Configure your Telegram bot's Mini App URL through BotFather. Both Telegram and ordinary browser flows work. No Telegram identity is trusted or used for authorization. Local files and active processes do not replace deployment. Review applicable requirements, account ownership, network list, legal terms, fees, refunds and delivery expectations before public launch. The telebirr symbol is a vector approximation; replace with an approved brand asset if available.
-
-## Flow
-Choose network, enter at least 6 USDT and a receiving address, review ETB total, then pay 0953610009 (Lykun). Upload a receipt or send it to @ChristianAbe. The app validates address shapes, not ownership, chain activity or cryptographic checksums. TON users must supply their receiving memo when required. Payments are pending manual review; this app neither verifies telebirr transfers nor sends USDT automatically.
-
-## Security and operation
-Receipts require admin bearer authentication and are never exposed as static files. Uploads have size/type/signature checks and a basic in-memory rate limit (10 attempts per socket IP/hour). Configure a trusted reverse proxy and production rate limiting before a public launch; do not trust arbitrary forwarded IP headers. Image signatures are not malware scanning. The simple inbox lists all orders and is intended for a small initial deployment. Restarting clears rate-limit counters. No secrets belong in source control. Run only one instance against the local file store. Add a database/object store for scaling.
-
-## Free Telegram deployment
-Follow [DEPLOY.md](DEPLOY.md) for Render Free hosting, a free HTTPS subdomain, private Supabase storage, and BotFather setup. `render.yaml` defines the service and `deploy/supabase.sql` defines private storage. Setting both Supabase variables enables durable storage instead of local files. The admin inbox lists the most recent 1,000 Supabase orders.
+## Historical backend
+`server.js`, `storage.js`, `deploy/supabase.sql` and the old admin files are retained for historical receipt access and are not deployed in the static output. `npm run start:legacy` runs the old development server, whose production API is not used by the static app. Do not delete existing databases or historical data as part of migration. The static customer app uses no admin tokens, Supabase keys, or Telegram bot tokens.

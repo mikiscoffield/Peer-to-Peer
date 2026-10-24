@@ -1,0 +1,45 @@
+{
+  "rate": 182.2,
+  "networks": [
+    {
+      "id": "TRC20",
+      "name": "TRON"
+    },
+    {
+      "id": "ERC20",
+      "name": "Ethereum"
+    },
+    {
+      "id": "BEP20",
+      "name": "BNB Smart Chain"
+    },
+    {
+      "id": "SOL",
+      "name": "Solana"
+    },
+    {
+      "id": "TON",
+      "name": "TON"
+    },
+    {
+      "id": "ARBITRUM",
+      "name": "Arbitrum One"
+    },
+    {
+      "id": "OPTIMISM",
+      "name": "Optimism"
+    },
+    {
+      "id": "POLYGON",
+      "name": "Polygon"
+    },
+    {
+      "id": "AVAXC",
+      "name": "Avalanche C-Chain"
+    },
+    {
+      "id": "APTOS",
+      "name": "Aptos"
+    }
+  ]
+}
