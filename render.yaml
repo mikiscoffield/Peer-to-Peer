@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: lykun-exchange
+    runtime: node
+    plan: free
+    buildCommand: npm ci --ignore-scripts && npm test
+    startCommand: npm start
+    healthCheckPath: /api/config
+    envVars:
+      - key: NODE_VERSION
+        value: 24.19.0
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: USDT_ETB_RATE
+        value: '182.2'
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
